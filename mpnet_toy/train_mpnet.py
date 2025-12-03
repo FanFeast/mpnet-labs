@@ -111,7 +111,7 @@ def main() -> None:
 
     scaler = GradScaler('cuda')
 
-    num_epochs = 100
+    num_epochs = 20
 
     for epoch in range(1, num_epochs + 1):
         train_loss = train_one_epoch(model, train_loader, optimizer, scaler, device)
@@ -119,8 +119,14 @@ def main() -> None:
 
         print(f"Epoch {epoch:02d} train_loss={train_loss:.6f} val_loss={val_loss:.6f}")
 
-    # Save trained weights
-    torch.save(model.state_dict(), "mpnet_toy_model.pt")
+    # Save trained weights; compiled modules prefix params with "._orig_mod."
+    # Strip that so load_state_dict works without compile.
+    state = model.state_dict()
+    clean_state = {
+        k.replace("._orig_mod.", "."): v
+        for k, v in state.items()
+    }
+    torch.save(clean_state, "mpnet_toy_model.pt")
     print("Saved model to mpnet_toy_model.pt")
 
 

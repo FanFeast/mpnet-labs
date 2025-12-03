@@ -6,7 +6,7 @@ from visualize_world import show_path_on_grid
 
 
 def main() -> None:
-    world = World2D.random_world(num_obstacles=9, grid_size=64, seed=3)
+    world = World2D.random_world(num_obstacles=9, grid_size=64, seed=1)
     grid = world.get_occupancy_grid()
 
     start = world.sample_free_point()
